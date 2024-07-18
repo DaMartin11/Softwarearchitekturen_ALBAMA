@@ -1,0 +1,64 @@
+version: '3.9'
+
+services:
+  cart_service:
+    container_name: cart-service
+    build:
+      context: .
+      dockerfile: src/main/resources/Dockerfile
+    depends_on:
+      carts_db:
+        condition: service_healthy
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://carts_db:3306/cart
+      - SPRING_DATASOURCE_USERNAME=ali
+      - SPRING_DATASOURCE_PASSWORD=ali
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.MySQL8Dialect
+      - SPRING_JPA_HIBERNATE_DDL-AUTO=update
+    ports:
+      - "8082:8080"
+    networks:
+      - mynetwork
+
+  carts_db:
+    image: 'mysql:latest'
+    container_name: carts_db
+    environment:
+      MYSQL_DATABASE: cart
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_USER: ali
+      MYSQL_PASSWORD: ali
+    volumes:
+      - ./data:/var/lib/mysql
+    ports:
+      - "3306"  # Avoid port conflicts by using a different host port
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -u ali -pali"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mynetwork
+
+  rabbitmq:
+    image: 'rabbitmq:management'
+    container_name: rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "rabbitmq-diagnostics ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - mynetwork
+
+networks:
+  mynetwork:
+    driver: bridge
