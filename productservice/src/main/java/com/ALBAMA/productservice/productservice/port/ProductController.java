@@ -7,6 +7,7 @@ import com.ALBAMA.productservice.productservice.port.exception.EmptySearchResult
 import com.ALBAMA.productservice.productservice.port.exception.NoProductsException;
 import com.ALBAMA.productservice.productservice.port.exception.ProductAlreadyExistsException;
 import com.ALBAMA.productservice.productservice.port.exception.ProductNotFoundException;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
@@ -19,8 +20,9 @@ import java.util.UUID;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
-@RequestMapping("/api/v1/")
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/products")
+@Tag(name = "Product Service", description = "Product Service API")
 public class ProductController {
     @Autowired
     private RabbitTemplate rabbitTemplate;
