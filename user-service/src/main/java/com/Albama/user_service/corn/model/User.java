@@ -24,14 +24,23 @@ public class User implements UserDetails {
     @GeneratedValue(strategy= GenerationType.UUID)
     private UUID id;
 
-    @NonNull private String firstName;
-    @NonNull private String lastName;
-    @NonNull private String email;
-    @NonNull private String password;
-    @NonNull private String address;
-    @NonNull private String country;
-    @NonNull private String city;
-    @NonNull private String zipCode;
+    @NonNull
+    private String firstName;
+    @NonNull
+    private String lastName;
+
+    @NonNull
+    private String email;
+    @NonNull
+    private String password;
+    @NonNull
+    private String address;
+    @NonNull
+    private String country;
+    @NonNull
+    private String city;
+    @NonNull
+    private String zipCode;
 
     @Enumerated(EnumType.STRING)
     @NonNull
